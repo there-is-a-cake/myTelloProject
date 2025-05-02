@@ -59,7 +59,7 @@ class InferenNet_fast(nn.Module):
 
         model = createModel().to(device)
         print('Loading pose model from {}'.format('./models/sppe/duc_se.pth'))
-        model.load_state_dict(torch.load('/Users/yunyi/Desktop/AlphaPose/models/sppe/duc_se.pth',map_location='cpu'))
+        model.load_state_dict(torch.load("E:/myTelloProject-master/AlphaPose/models/sppe/duc_se.pth",map_location='cpu'))
         model.eval()
         self.pyranet = model
 

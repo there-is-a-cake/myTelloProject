@@ -26,8 +26,8 @@ class TelloCV(object):
         self.drone = Tello
         # self.init_drone()
 
-        self.caffe_prototxt_path = "../Face_Distance/model/RFB-320.prototxt"
-        self.caffe_model_path = "../Face_Distance/model/RFB-320.caffemodel"
+        self.caffe_prototxt_path = "E:/myTelloProject-master/Face_Distance/model/RFB-320.prototxt"
+        self.caffe_model_path = "E:/myTelloProject-master/Face_Distance/model/RFB-320.caffemodel"
         self.net = dnn.readNetFromCaffe(self.caffe_prototxt_path, self.caffe_model_path)
 
         # container for processing the packets into frames

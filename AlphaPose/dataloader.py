@@ -1,4 +1,11 @@
 import os
+import sys
+
+# 添加项目根目录到Python路径
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+if parent_dir not in sys.path:
+    sys.path.insert(0, parent_dir)
 import torch
 from torch.autograd import Variable
 import torch.utils.data as data
@@ -274,8 +281,8 @@ class DetectionLoader:
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         # initialize the file video stream along with the boolean
         # used to indicate if the thread should be stopped or not
-        self.det_model = Darknet("../AlphaPose/yolo/cfg/yolov3-spp.cfg")
-        self.det_model.load_weights('../AlphaPose/models/yolo/yolov3-spp.weights')
+        self.det_model = Darknet("E:/myTelloProject-master/AlphaPose/yolo/cfg/yolov3-spp.cfg")
+        self.det_model.load_weights("E:/myTelloProject-master/AlphaPose/models/yolo/yolov3-spp.weights")
         self.det_model.net_info['height'] = opt.inp_dim
         self.det_inp_dim = int(self.det_model.net_info['height'])
         assert self.det_inp_dim % 32 == 0

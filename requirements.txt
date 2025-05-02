@@ -1,0 +1,13 @@
+numpy==1.23.5
+pandas==2.0.3
+tensorflow==2.12.0
+opencv-python==4.11.0.86
+opencv-contrib-python==4.8.1.78
+torch==1.70
+torchaudio==0.7.0
+torchvision==0.19.1
+scikit-learn==1.3.2
+matplotlib==3.7.5
+seaborn==0.13.2
+PyQt5==5.15.11
+mediapipe==0.10.5

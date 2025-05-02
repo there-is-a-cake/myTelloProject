@@ -2,7 +2,8 @@ import torch
 import re
 import os
 import collections
-from torch._six import string_classes, int_classes
+string_classes = (str,)
+int_classes = (int,)
 import cv2
 from AlphaPose.opt import opt
 from tqdm import tqdm

@@ -1,17 +1,24 @@
 import pyaudio  # 导入pyAudio的源代码文件，我们下面要用到，不用到就不用导入啦
 import wave
 from aip import AipSpeech
-
+import os
+import time
 class mySpeechRecognition:
     def __init__(self):
         #初始化
-        self.APP_ID = '23503942'  # 新建AiPSpeech
-        self.API_KEY = 'ac19dxg6NCm3D00rreITDNSD'
-        self.SECRET_KEY = 'sg43RzlyAq0tGtVYATfsEU9I0hAOBTYE'
+        self.APP_ID = '117810648'  # 新建AiPSpeech
+        self.API_KEY = 'PqJ08jZkBwQ11w6XVDyFDv3C'
+        self.SECRET_KEY = 'LnEC38afpFrR7rhvjjGMMAivv8t5HcDU'
         self.client = AipSpeech(self.APP_ID, self.API_KEY, self.SECRET_KEY)
         self.setControlKEYS()
         self.order = ''
-
+        # 设置语音文件保存目录
+        self.voice_dir = "E:/myTelloProject-master/voice"
+        # 确保目录存在
+        if not os.path.exists(self.voice_dir):
+            os.makedirs(self.voice_dir)
+        # 设置默认输出文件路径
+        self.output_file = os.path.join(self.voice_dir, "output.wav")
     def setControlKEYS(self):
         """将识别出的识别出的指令转化为英文指令"""
         # 顺逆时针旋转还需要再二次判断一下
@@ -49,8 +56,13 @@ class mySpeechRecognition:
         FORMAT = pyaudio.paInt16  # 量化位数
         CHANNELS = 1  # 采样管道数
         RATE = 16000  # 采样率
-        RECORD_SECONDS = 3      #录音时间
-        WAVE_OUTPUT_FILENAME = "../output.wav"  # 文件保存的名称
+        RECORD_SECONDS = 4      #录音时间
+        # 每次录音使用带时间戳的文件名
+        timestamp = time.strftime("%Y%m%d_%H%M%S")
+        filename = f"voice_{timestamp}.wav"
+        self.output_file = os.path.join(self.voice_dir, filename)
+        
+        WAVE_OUTPUT_FILENAME = self.output_file
         p = pyaudio.PyAudio()  # 创建PyAudio的实例对象
         stream = p.open(format=FORMAT,  # 调用PyAudio实例对象的open方法创建流Stream
                         channels=CHANNELS,
@@ -77,14 +89,20 @@ class mySpeechRecognition:
             with open(filePath, 'rb') as fp:
                 return fp.read()
 
-        result = self.client.asr(get_file_content('../output.wav'), 'wav', 16000, {
-            'dev_pid': 1537,  # 识别本地文件
-        })
-        result_text = result["result"][0]
-
-        print("you said: " + result_text)
-
-        return self.getOrder(result_text)
+        try:
+            result = self.client.asr(get_file_content(self.output_file), 'wav', 16000, {
+                'dev_pid': 1537,  # 识别本地文件
+            })
+            if "result" in result and len(result["result"]) > 0:
+                result_text = result["result"][0]
+                print("你说: " + result_text)
+                return self.getOrder(result_text)
+            else:
+                print("语音识别失败，未能识别出文本")
+                return False, "未能识别语音"
+        except Exception as e:
+            print(f"语音识别过程出错: {e}")
+            return False, "识别过程出错"
 
     def getOrder(self,result : str):
         """
